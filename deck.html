@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PagePal - Hackathon Pitch</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .deck { height: 100vh; width: 100vw; position: relative; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  /* ── Slide 1: Title ── */
+  .slide-1 {
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%);
+    text-align: center;
+  }
+  .slide-1::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 60% 40%, rgba(59,130,246,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 30% 70%, rgba(168,85,247,0.08) 0%, transparent 50%);
+    animation: drift 20s ease-in-out infinite;
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0,0) rotate(0deg); }
+    50% { transform: translate(-2%,1%) rotate(1deg); }
+  }
+  .slide-1 .logo {
+    position: relative;
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px; font-weight: 800; color: #fff;
+    margin-bottom: 40px;
+    box-shadow: 0 20px 60px rgba(59,130,246,0.3);
+  }
+  .slide-1 h1 {
+    position: relative;
+    font-size: 72px; font-weight: 800;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+  }
+  .slide-1 .tagline {
+    position: relative;
+    font-size: 26px; font-weight: 300;
+    color: #94a3b8; letter-spacing: 0.5px;
+    margin-bottom: 48px;
+  }
+  .slide-1 .badge {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 100px;
+    padding: 12px 28px;
+    font-size: 15px; color: #60a5fa; font-weight: 500;
+  }
+  .slide-1 .badge .dot {
+    width: 8px; height: 8px;
+    background: #3B82F6;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+  .slide-1 .built-with {
+    position: absolute;
+    bottom: 40px;
+    font-size: 14px; color: #475569;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .slide-1 .built-with span {
+    color: #64748b; font-weight: 500;
+  }
+
+  /* ── Slide 2: Problem / Solution ── */
+  .slide-2 {
+    background: #0a0a0a;
+    padding: 60px 100px;
+  }
+  .slide-2 .columns {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 0;
+    width: 100%;
+    max-width: 1100px;
+    align-items: start;
+  }
+  .slide-2 .divider {
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #334155, transparent);
+    justify-self: center;
+  }
+  .slide-2 .col { padding: 0 20px; }
+  .slide-2 .col-label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+  }
+  .slide-2 .col-label.problem { color: #f87171; }
+  .slide-2 .col-label.solution { color: #34d399; }
+  .slide-2 .pain-point {
+    display: flex; gap: 16px;
+    margin-bottom: 28px;
+    align-items: flex-start;
+  }
+  .slide-2 .pain-icon {
+    width: 36px; height: 36px; min-width: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .slide-2 .pain-icon.red { background: rgba(248,113,113,0.1); color: #f87171; }
+  .slide-2 .pain-icon.green { background: rgba(52,211,153,0.1); color: #34d399; }
+  .slide-2 .pain-point h3 {
+    font-size: 17px; font-weight: 600; color: #e2e8f0;
+    margin-bottom: 4px;
+  }
+  .slide-2 .pain-point p {
+    font-size: 14px; color: #64748b; line-height: 1.5;
+  }
+
+  /* ── Slide 3: Architecture ── */
+  .slide-3 {
+    background: #0a0a0a;
+    padding: 50px 80px;
+  }
+  .slide-3 h2 {
+    font-size: 36px; font-weight: 700;
+    margin-bottom: 50px;
+    color: #e2e8f0;
+    text-align: center;
+  }
+  .arch {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 1100px;
+    justify-content: center;
+  }
+  .arch-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-width: 160px;
+  }
+  .arch-box {
+    width: 160px;
+    padding: 24px 16px;
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+  }
+  .arch-box .arch-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  .arch-box h4 {
+    font-size: 14px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .arch-box p {
+    font-size: 11px; font-weight: 400;
+    opacity: 0.6;
+    line-height: 1.4;
+  }
+  .arch-box.browser {
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.05));
+    border: 1px solid rgba(59,130,246,0.2);
+    color: #93c5fd;
+  }
+  .arch-box.extension {
+    background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(168,85,247,0.05));
+    border: 1px solid rgba(168,85,247,0.2);
+    color: #c4b5fd;
+  }
+  .arch-box.lua {
+    background: linear-gradient(135deg, rgba(52,211,153,0.1), rgba(52,211,153,0.05));
+    border: 1px solid rgba(52,211,153,0.2);
+    color: #6ee7b7;
+    width: 200px;
+  }
+  .arch-box.model {
+    background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.05));
+    border: 1px solid rgba(251,191,36,0.2);
+    color: #fcd34d;
+  }
+  .arch-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 80px;
+    color: #475569;
+  }
+  .arch-arrow .line {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, #334155, #475569);
+    position: relative;
+  }
+  .arch-arrow .line::after {
+    content: '';
+    position: absolute; right: -6px; top: -4px;
+    border: 5px solid transparent;
+    border-left: 6px solid #475569;
+  }
+  .arch-arrow span {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .arch-details {
+    display: flex;
+    gap: 40px;
+    margin-top: 50px;
+    width: 100%;
+    max-width: 900px;
+    justify-content: center;
+  }
+  .arch-detail {
+    text-align: center;
+    flex: 1;
+  }
+  .arch-detail .num {
+    font-size: 32px; font-weight: 800;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  .arch-detail .label {
+    font-size: 13px; color: #64748b; font-weight: 500;
+  }
+
+  /* ── Slide 4: Future Scope ── */
+  .slide-4 {
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    text-align: center;
+  }
+  .slide-4::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.08) 0%, transparent 50%);
+  }
+  .slide-4 h2 {
+    position: relative;
+    font-size: 48px; font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+    color: #e2e8f0;
+  }
+  .slide-4 .subtitle {
+    position: relative;
+    font-size: 20px; color: #64748b;
+    margin-bottom: 50px; font-weight: 300;
+  }
+  .future-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 800px;
+    width: 100%;
+    margin-bottom: 50px;
+  }
+  .future-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: left;
+  }
+  .future-card .card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  .future-card h4 {
+    font-size: 15px; font-weight: 600;
+    color: #e2e8f0; margin-bottom: 6px;
+  }
+  .future-card p {
+    font-size: 12px; color: #64748b; line-height: 1.6;
+  }
+  .future-card .tag {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 100px;
+    padding: 3px 12px;
+    font-size: 10px; color: #60a5fa; font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .slide-4 .tech-stack {
+    position: relative;
+    display: flex; gap: 16px;
+    justify-content: center;
+  }
+  .tech-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 13px; color: #94a3b8; font-weight: 500;
+  }
+
+  /* ── Nav ── */
+  .nav {
+    position: fixed; bottom: 30px;
+    left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px;
+    z-index: 100;
+  }
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #334155;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none; outline: none;
+  }
+  .nav-dot.active {
+    background: #3B82F6;
+    width: 32px;
+    border-radius: 5px;
+  }
+  .slide-counter {
+    position: fixed; top: 30px; right: 40px;
+    font-size: 13px; color: #475569;
+    font-weight: 500; z-index: 100;
+  }
+  .key-hint {
+    position: fixed; bottom: 30px; right: 40px;
+    font-size: 11px; color: #334155;
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide slide-1 active" data-slide="1">
+    <div class="logo">P</div>
+    <h1>PagePal</h1>
+    <p class="tagline">Chat with any website, instantly.</p>
+    <div class="badge">
+      <div class="dot"></div>
+      Chrome Extension + Lua AI Agent
+    </div>
+    <div class="built-with">
+      Built with <span>Lua Agent OS</span> &middot; <span>Gemini 2.5 Flash</span> &middot; <span>LuaPop Widget</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Problem / Solution -->
+  <div class="slide slide-2" data-slide="2">
+    <div class="columns">
+      <div class="col">
+        <div class="col-label problem">The Problem</div>
+        <div class="pain-point">
+          <div class="pain-icon red">&times;</div>
+          <div>
+            <h3>Information Overload</h3>
+            <p>Long pages, dense docs, no way to quickly find what you need</p>
+          </div>
+        </div>
+        <div class="pain-point">
+          <div class="pain-icon red">&times;</div>
+          <div>
+            <h3>Context Switching</h3>
+            <p>Copy text, open ChatGPT, paste, ask &mdash; repeat for every page</p>
+          </div>
+        </div>
+        <div class="pain-point">
+          <div class="pain-icon red">&times;</div>
+          <div>
+            <h3>No Page Awareness</h3>
+            <p>Generic chatbots don't know what you're looking at right now</p>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="col">
+        <div class="col-label solution">PagePal Solution</div>
+        <div class="pain-point">
+          <div class="pain-icon green">&#10003;</div>
+          <div>
+            <h3>Chat Any Page</h3>
+            <p>Ask questions about any webpage &mdash; get answers grounded in its content</p>
+          </div>
+        </div>
+        <div class="pain-point">
+          <div class="pain-icon green">&#10003;</div>
+          <div>
+            <h3>Zero Friction</h3>
+            <p>Chat widget lives on the page. No copy-paste, no tab switching</p>
+          </div>
+        </div>
+        <div class="pain-point">
+          <div class="pain-icon green">&#10003;</div>
+          <div>
+            <h3>Full Page Context</h3>
+            <p>Scrapes title, URL, meta, and content &mdash; the AI sees what you see</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Architecture -->
+  <div class="slide slide-3" data-slide="3">
+    <h2>How It Works</h2>
+    <div class="arch">
+      <div class="arch-node">
+        <div class="arch-box browser">
+          <div class="arch-icon">&#127760;</div>
+          <h4>Any Website</h4>
+          <p>User browses any page on the web</p>
+        </div>
+      </div>
+      <div class="arch-arrow">
+        <span>scrape text</span>
+        <div class="line"></div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-box extension">
+          <div class="arch-icon">&#129513;</div>
+          <h4>Chrome Extension</h4>
+          <p>Content script extracts page text + injects LuaPop widget</p>
+        </div>
+      </div>
+      <div class="arch-arrow">
+        <span>runtimeContext</span>
+        <div class="line"></div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-box lua">
+          <div class="arch-icon">&#9889;</div>
+          <h4>Lua Agent OS</h4>
+          <p>PagePal agent with persona and page context awareness</p>
+        </div>
+      </div>
+      <div class="arch-arrow">
+        <span>LLM call</span>
+        <div class="line"></div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-box model">
+          <div class="arch-icon">&#10024;</div>
+          <h4>Gemini 2.5 Flash</h4>
+          <p>Fast, cheap responses grounded in page content</p>
+        </div>
+      </div>
+    </div>
+    <div class="arch-details">
+      <div class="arch-detail">
+        <div class="num">3</div>
+        <div class="label">Files in extension</div>
+      </div>
+      <div class="arch-detail">
+        <div class="num">4K</div>
+        <div class="label">Chars per page context</div>
+      </div>
+      <div class="arch-detail">
+        <div class="num">0</div>
+        <div class="label">Backend to manage</div>
+      </div>
+      <div class="arch-detail">
+        <div class="num">&lt;5min</div>
+        <div class="label">Setup to deploy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Future Scope -->
+  <div class="slide slide-4" data-slide="4">
+    <h2>Future Scope</h2>
+    <p class="subtitle">What PagePal becomes with Lua's full toolkit</p>
+    <div class="future-grid">
+      <div class="future-card">
+        <div class="card-icon">&#128218;</div>
+        <h4>Cross-Page Memory</h4>
+        <p>Highlight &amp; save text from any site. Search across all saved snippets later with semantic vector search.</p>
+        <span class="tag">Lua Data API</span>
+      </div>
+      <div class="future-card">
+        <div class="card-icon">&#128197;</div>
+        <h4>Action from Page</h4>
+        <p>"Add this event to my calendar" or "Create a ticket from this bug report" &mdash; directly from the page.</p>
+        <span class="tag">250+ Integrations</span>
+      </div>
+      <div class="future-card">
+        <div class="card-icon">&#128276;</div>
+        <h4>Page Change Alerts</h4>
+        <p>Monitor pages for changes. Get notified when prices drop or new content appears via webhooks + scheduled jobs.</p>
+        <span class="tag">Webhooks + Jobs</span>
+      </div>
+      <div class="future-card">
+        <div class="card-icon">&#127757;</div>
+        <h4>Multi-Channel</h4>
+        <p>Same agent accessible via WhatsApp, Slack, or email. Save from browser, recall from your phone.</p>
+        <span class="tag">Lua Channels</span>
+      </div>
+    </div>
+    <div class="tech-stack">
+      <span class="tech-tag">Lua Agent OS</span>
+      <span class="tech-tag">LuaPop Widget</span>
+      <span class="tech-tag">Gemini 2.5 Flash</span>
+      <span class="tech-tag">Chrome MV3</span>
+      <span class="tech-tag">TypeScript</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Nav -->
+<div class="slide-counter"><span id="current">1</span> / 4</div>
+<div class="nav">
+  <button class="nav-dot active" data-goto="1"></button>
+  <button class="nav-dot" data-goto="2"></button>
+  <button class="nav-dot" data-goto="3"></button>
+  <button class="nav-dot" data-goto="4"></button>
+</div>
+<div class="key-hint">&larr; &rarr; arrow keys to navigate</div>
+
+<script>
+  let current = 1;
+  const total = 4;
+
+  function goTo(n) {
+    if (n < 1 || n > total) return;
+    document.querySelector('.slide.active').classList.remove('active');
+    document.querySelector('[data-slide="' + n + '"]').classList.add('active');
+    document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+    document.querySelector('[data-goto="' + n + '"]').classList.add('active');
+    document.getElementById('current').textContent = n;
+    current = n;
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+  });
+
+  document.querySelectorAll('.nav-dot').forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      goTo(parseInt(this.dataset.goto));
+    });
+  });
+</script>
+</body>
+</html>
